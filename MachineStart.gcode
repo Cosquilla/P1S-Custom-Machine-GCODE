@@ -91,7 +91,7 @@ M412 S1 ; ===turn on filament runout detection===
 M109 S250 ;set nozzle to common flush temp
 M106 P1 S0
 G92 E0
-G1 E50 F200
+G1 E70 F200 ; Here the E50 value was changed to E70 to extrude another 20mm
 M400
 M104 S[nozzle_temperature_initial_layer]
 G92 E0

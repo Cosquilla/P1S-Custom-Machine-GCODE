@@ -19,6 +19,8 @@ G1 Y265 F3000
 {endif}
 
 G1 X100 F12000 ; wipe
+G1 E-20 F200   ;Filament is pushed out 20 mm. 
+M400           ;Waits until pushing out is completed before doing anything else.  
 ; pull back filament to AMS
 M620 S255
 G1 X20 Y50 F12000
