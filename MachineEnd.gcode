@@ -11,7 +11,7 @@ G1 Y265 F3000
 
 ;The fans and bed will get the turn off command after chamber cooldown for following types of material: ASA, ABS, PA(Nylon), PA-CF(Nylon Carbonfibre)
 {if (filament_type[initial_tool]=="ASA") || (filament_type[initial_tool]=="ABS") || (filament_type[initial_tool]=="PA-CF") || (filament_type[initial_tool]=="PA")}
-{elsif} 
+{else} 
     M140 S0 ; turn off bed
     M106 S0 ; turn off fan
     M106 P2 S0 ; turn off remote part cooling fan
