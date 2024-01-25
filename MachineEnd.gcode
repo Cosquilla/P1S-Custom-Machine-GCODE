@@ -8,14 +8,17 @@ G1 Y265 F3000
 
 G1 X65 Y245 F12000
 G1 Y265 F3000
-M140 S0 ; turn off bed
-M106 S0 ; turn off fan
-M106 P2 S0 ; turn off remote part cooling fan
-M106 P3 S0 ; turn off chamber cooling fan
+
+;The fans and bed will get the turn off command after chamber cooldown for following types of material: ASA, ABS, PA(Nylon), PA-CF(Nylon Carbonfibre)
+{if (filament_type[initial_tool]=="ASA") || (filament_type[initial_tool]=="ABS") || (filament_type[initial_tool]=="PA-CF") || (filament_type[initial_tool]=="PA")}
+{elsif} 
+    M140 S0 ; turn off bed
+    M106 S0 ; turn off fan
+    M106 P2 S0 ; turn off remote part cooling fan
+    M106 P3 S0 ; turn off chamber cooling fan
+{endif}
 
 G1 X100 F12000 ; wipe
-G1 E-20 F200   ;Filament is pushed out 20 mm. 
-M400                   ;Waits until pushing out is completed before doing anything else.  
 ; pull back filament to AMS
 M620 S255
 G1 X20 Y50 F12000
@@ -45,6 +48,48 @@ M17 Z0.4 ; lower z motor current to reduce impact if there is something in the b
     G1 Z250 F600
     G1 Z248
 {endif}
+
+;===== slow heatbed cooldown ====================
+; will be performed for the following types of material: ASA, ABS, PA(Nylon), PA-CF(Nylon Carbonfibre)
+{if (filament_type[initial_tool]=="ASA") || (filament_type[initial_tool]=="ABS") || (filament_type[initial_tool]=="PA-CF") || (filament_type[initial_tool]=="PA")}
+    M140 S90 ;set bed temperature to 90°C
+    G4 S90 ; wait 90 seconds
+    G4 S90 ; wait 90 seconds
+    G4 S90 ; wait 90 seconds
+    M190 S80 ;set bed temperature to 80°C
+    G4 S90 ; wait 90 seconds
+    G4 S90 ; wait 90 seconds
+    G4 S90 ; wait 90 seconds
+    M190 S70 ;set bed temperature to 70°C
+    G4 S90 ; wait 90 seconds
+    G4 S90 ; wait 90 seconds
+    G4 S90 ; wait 90 seconds
+    M190 S60 ;set bed temperature to 60°C
+    G4 S90 ; wait 90 seconds
+    G4 S90 ; wait 90 seconds
+    G4 S90 ; wait 90 seconds
+    M190 S55 ;set bed temperature to 55°C
+    G4 S90 ; wait 90 seconds
+    G4 S90 ; wait 90 seconds
+    G4 S90 ; wait 90 seconds
+    M190 S50 ;set bed temperature to 50°C
+    G4 S90 ; wait 90 seconds
+    G4 S90 ; wait 90 seconds
+    G4 S90 ; wait 90 seconds
+    M190 S45 ;set bed temperature to 45°C
+    G4 S90 ; wait 90 seconds
+    G4 S90 ; wait 90 seconds
+    G4 S90 ; wait 90 seconds
+    M190 S40 ;set bed temperature to 40°C
+    G4 S90 ; wait 90 seconds
+    G4 S90 ; wait 90 seconds
+    G4 S90 ; wait 90 seconds
+    M140 S0 ; turn off bed
+    M106 S0 ; turn off fan
+    M106 P2 S0 ; turn off remote part cooling fan
+    M106 P3 S0 ; turn off chamber cooling fan
+{endif}
+
 M400 P100
 M17 R ; restore z current
 
