@@ -19,7 +19,8 @@ G1 X90 F3000
 G1 Y255 F4000
 G1 X100 F5000
 G1 X120 F15000
-
+G1 E-20 F200    ;Filament is pushed out 20 mm.
+M400                  ;Waits until pushing out is completed before doing anything else.
 G1 X20 Y50 F21000
 G1 Y-3
 {if toolchange_count == 2}
@@ -34,7 +35,9 @@ M620.1 E F[new_filament_e_feedrate] T{nozzle_temperature_range_high[next_extrude
 
 {if next_extruder < 255}
 M400
-
+G1 E18 F200   ;Filament is pushed back in 18 mm. 
+G1 E2 F20       ;Filament is pushed back in 2 mm but slower. 
+M400               ;Waits until pushing back in is completed before doing anything else.
 G92 E0
 {if flush_length_1 > 1}
 ; FLUSH_START
