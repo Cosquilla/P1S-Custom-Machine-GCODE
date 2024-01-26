@@ -28,7 +28,6 @@ M140 S[bed_temperature_initial_layer_single] ;set bed temp
 M190 S[bed_temperature_initial_layer_single] ;wait for bed temp
 
 
-
 ;=============turn on fans to prevent PLA jamming=================
 {if filament_type[initial_extruder]=="PLA"}
     {if (bed_temperature[initial_extruder] >45)||(bed_temperature_initial_layer[initial_extruder] >45)}
@@ -37,7 +36,30 @@ M190 S[bed_temperature_initial_layer_single] ;wait for bed temp
     M106 P3 S255
     {endif};Prevent PLA from jamming
 {endif}
-M106 P2 S100 ; turn on big fan ,to cool down toolhead
+M106 P2 S100 ; turn on aux fan ,to cool down toolhead
+
+;===== HEATING OF CHAMBER ====================
+; will be performed for the following types of material: ASA, ABS, PA(Nylon), PA-CF(Nylon Carbonfibre)
+{if (filament_type[initial_tool]=="ASA") || (filament_type[initial_tool]=="ABS") || (filament_type[initial_tool]=="PA-CF") || (filament_type[initial_tool]=="PA")}
+    M106 P2 S255 ; turn ON aux fan at full speed to distribute the heat as fast as possible
+    M106 P3 S0 ; turn OFF chamber fan that chamber heats up as strong as possible
+    ; the following G4 commands sum up to a waiting time of 20 minutes
+    G4 S90 ; wait 1min30sec or 90 seconds
+    G4 S90 ; wait 90 seconds
+    G4 S90 ; wait 90 seconds
+    G4 S90 ; wait 90 seconds
+    G4 S90 ; wait 90 seconds
+    G4 S90 ; wait 90 seconds    
+    G4 S90 ; wait 90 seconds    
+    G4 S90 ; wait 90 seconds    
+    G4 S90 ; wait 90 seconds    
+    G4 S90 ; wait 90 seconds    
+    G4 S90 ; wait 90 seconds   
+    G4 S90 ; wait 90 seconds   
+    G4 S90 ; wait 90 seconds   
+    G4 S90 ; wait 30 seconds   
+    M106 P2 S0 ; turn OFF aux fan
+{endif}
 
 ;===== prepare print temperature and material ==========
 M104 S[nozzle_temperature_initial_layer] ;set extruder temp
